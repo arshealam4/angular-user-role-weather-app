@@ -1,0 +1,152 @@
+<app-navigation></app-navigation>
+
+<div class="container">
+  <h2>Users</h2>
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addModal">Add User</button>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>USERNAME</th>
+        <th>EMAIL</th>
+        <th>GENDER</th>
+        <th>ROLE</th>
+        <th>DATE</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{user?.userName}}</td>
+        <td>{{user?.email}}</td>
+        <td>{{user?.gender}}</td>
+        <td>{{user?.roleId?.roleName}}</td>
+        <td>{{user?.timestamp | date: 'short'}}</td>
+        <td><button class="btn btn-warning" (click)="getSingleUser(user._id)" data-toggle="modal" data-target="#editModal">EDIT</button></td>
+        <td><button class="btn btn-danger" (click)="deleteUser(user._id)">DELETE</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- add Modal -->
+  <div class="modal fade" id="addModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add User</h4>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="addUser" autocomplete="off" (ngSubmit)="saveUser()">
+              <div class="form-group">
+                  <input type="text" formControlName="userName" class="form-control" placeholder="userName">
+                  <span *ngIf="addUser.controls['userName'].invalid && submitted"
+                    class="col-sm-12 text-danger">Invalid user name</span>
+              </div>
+                <div class="form-group">
+                    <input type="text" formControlName="email" class="form-control" placeholder="email">
+                    <span *ngIf="addUser.controls['email'].invalid && submitted"
+                    class="col-sm-12 text-danger">Invalid email</span>
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" [formControl]="addUser.controls['gender']" formControlName="gender"
+                            name="gender">
+                      <option [ngValue]="null">Select Gender</option>
+                      <option *ngFor="let gender of genderList" [ngValue]="gender.name"> {{gender.name}}
+                      </option>
+                    </select>
+                    <span *ngIf="addUser.controls['gender'].invalid && submitted"
+                    class="col-sm-12 text-danger">Invalid gender</span>
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" [formControl]="addUser.controls['roleId']" formControlName="roleId"
+                            name="roleId">
+                      <option [ngValue]="null">Select Role</option>
+                      <option *ngFor="let role of roleList" [ngValue]="role._id"> {{role.roleName}}
+                      </option>
+                    </select>
+                    <span *ngIf="addUser.controls['gender'].invalid && submitted"
+                    class="col-sm-12 text-danger">Invalid role</span>
+                </div>
+
+              <button type="submit" class="glb-btn-pep btn btn-primary" [disabled]="isSubmit">Add</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <!-- /add Model -->
+
+  <!-- edit Modal -->
+  <div class="modal fade" id="editModal" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit User</h4>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="editUser" autocomplete="off" (ngSubmit)="updateUser()">
+                <div class="form-group">
+                    <input type="text" formControlName="userName" class="form-control" placeholder="userName">
+                    <span *ngIf="editUser.controls['userName'].invalid && submitted"
+                      class="col-sm-12 text-danger">Invalid user name</span>
+                </div>
+                  <div class="form-group">
+                      <input type="text" formControlName="email" class="form-control" placeholder="email">
+                      <span *ngIf="editUser.controls['email'].invalid && submitted"
+                      class="col-sm-12 text-danger">Invalid email</span>
+                  </div>
+  
+                  <div class="form-group">
+                      <select class="form-control" formControlName="gender"
+                              name="gender">
+                        <option [ngValue]="null">Select Gender</option>
+                        <option *ngFor="let gender of genderList" [ngValue]="gender.name"> {{gender.name}}
+                        </option>
+                      </select>
+                      <span *ngIf="editUser.controls['gender'].invalid && submitted"
+                      class="col-sm-12 text-danger">Invalid gender</span>
+                  </div>
+  
+                  <div class="form-group">
+                      <select class="form-control" formControlName="roleId"
+                              name="roleId">
+                        <option [ngValue]="null">Select Role</option>
+                        <option *ngFor="let role of roleList" [ngValue]="role._id"> {{role.roleName}}
+                        </option>
+                      </select>
+                      <span *ngIf="editUser.controls['gender'].invalid && submitted"
+                      class="col-sm-12 text-danger">Invalid role</span>
+                  </div>
+  
+                <button type="submit" class="glb-btn-pep btn btn-primary" [disabled]="isSubmit">Update</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <!-- /edit Model -->
+
+  <div *ngIf="isSuccess" class="alert alert-success">
+    <strong>SUCCESS!</strong> {{successMessage}}
+  </div>
+
+  <div *ngIf="isError" class="alert alert-danger">
+    <strong>ERROR!</strong> {{errorMessage}}
+  </div>
+
+</div>

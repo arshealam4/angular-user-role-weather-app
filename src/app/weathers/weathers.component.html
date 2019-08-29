@@ -1,0 +1,40 @@
+<app-navigation></app-navigation>
+
+<div class="container">
+    <form [formGroup]="searchForm" autocomplete="off" (ngSubmit)="getWeather()">
+        <div class="col-sm-12">
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <input type="text" formControlName="city" class="form-control" placeholder="Enter city name">
+                    <span *ngIf="searchForm.controls['city'].invalid && submitted"
+                      class="col-sm-12 text-danger">Invalid city name</span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <button type="submit" class="glb-btn-pep btn btn-primary text-center" [disabled]="isSubmit">Search</button>
+              </div>
+        </div>
+         
+      </form>
+      
+      <h3>{{cityName | uppercase}}</h3>
+      <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>TEMPERATURE</th>
+              <th>HUMIDITY</th>
+              <th>WING</th>
+              <th>DESCRIPTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{weatherInfo?.main.temp}}</td>
+              <td>{{weatherInfo?.main.humidity}}</td>
+              <td>{{weatherInfo?.wind.speed}}</td>
+              <td>{{weatherInfo?.weather[0].description}}</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+  
